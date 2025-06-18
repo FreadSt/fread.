@@ -1,20 +1,19 @@
-# HEIN.
+# fread.
 
 Ecommerce Web Application built with the MERN Stack.
-Inspired by [_Lama Dev_](https://www.youtube.com/c/LamaDev)
 
 ## 🏁 Get Started
 
 1. **_Clone the repository_**
 
 ```sh
-git clone https://github.com/YousefElshabrawy/HEIN..git
+git clone https://github.com/FreadSt/fread.
 ```
 
 2. **_Navigate to the repository directory_**
 
 ```sh
-$ cd HEIN.
+$ cd fread.
 ```
 
 ### 💻 Client
@@ -173,6 +172,3 @@ $ npm run build
   <br>
   ![large screens](ss/large/login.png)
 
-## 🎥 Demo Videos
-
-https://user-images.githubusercontent.com/62210671/191046065-db8459d3-83ea-41a0-a898-abfd42432277.mp4
