@@ -1,10 +1,12 @@
-const express = require('express');
+// Load environment variables FIRST before requiring any routes
+require('dotenv').config();
 
+const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const logger = require('morgan');
 const MongoStore = require('connect-mongo');
 const session = require('express-session');
+const path = require("node:path");
 
 const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
@@ -12,10 +14,6 @@ const orderRoutes = require('./routes/order');
 const productRoutes = require('./routes/product');
 const authRoutes = require('./routes/auth');
 const stripeRoutes = require('./routes/stripe');
-const path = require("node:path");
-
-
-dotenv.config();
 
 const app = express();
 

@@ -1,45 +1,25 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
 import { useSelector } from 'react-redux';
-import StripeCheckout from 'react-stripe-checkout';
-
-import { userRequest } from '../request-methods';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../layout/Navbar';
 import Announcement from '../layout/Announcement';
 import Footer from '../layout/Footer';
 import CartProduct from '../components/CartProduct';
-import {useNavigation} from "react-router";
 
 const ShoppingCart = () => {
-  const [stripeToken, setStripeToken] = useState(null);
   const cart = useSelector((store) => store.cart);
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const continueShoppingClickHandler = () => {
-    navigate('/',{replace:true})
+    navigate('/', { replace: true });
   };
 
-  const onToken = (token) => {
-    setStripeToken(token);
-    console.log(token);
+  const handleCheckout = () => {
+    if (cart.totalPrice > 0 && cart.products.length > 0) {
+      navigate('/checkout');
+    }
   };
 
-  useEffect(() => {
-    const checkout = async () => {
-      try {
-        await userRequest.post('/checkout', {
-          tokenId: stripeToken.id,
-          amount: cart.totalPrice * 100,
-        });
-        history.push('/orders');
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    stripeToken && cart.totalPrice > 1 && checkout();
-  }, [stripeToken]);
   return (
     <>
       <Announcement />
@@ -62,20 +42,13 @@ const ShoppingCart = () => {
             {/* <a className='underline cursor-pointer'>Your Wishlist (0)</a> */}
           </div>
           <div>
-            <StripeCheckout
-              name='HEIN.'
-              billingAddress
-              shippingAddress
-              description={`Your total is ${cart.totalPrice}`}
-              amount={cart.totalPrice * 100}
-              currency='USD'
-              token={onToken}
-              stripeKey='pk_test_51LbSFeDby8a9HLcBzbuGETbDJiWZkCbNQx3gSpAfRZIKSrvsKakFGjvkNPTvzuHNNXKDYojDjdk3XhLlTajrQmeZ00JSyq9AOO'
+            <button
+              onClick={handleCheckout}
+              disabled={cart.totalPrice <= 0 || cart.products.length === 0}
+              className='text-sm lg:text-md cursor-pointer uppercase block p-4 border-2 hover:text-black hover:border-black hover:bg-white bg-black text-white transition ease-out duration-500 disabled:bg-gray-400 disabled:cursor-not-allowed'
             >
-              <a className='text-sm lg:text-md cursor-pointer uppercase block p-4 border-2 hover:text-black hover:border-black hover:bg-white bg-black text-white transition ease-out duration-500'>
-                checkout now
-              </a>
-            </StripeCheckout>
+              Checkout Now
+            </button>
           </div>
         </div>
         <div className='my-12 grid gap-8 lg:grid-cols-[2fr_1fr]'>
