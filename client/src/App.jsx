@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom
 import { useSelector } from 'react-redux';
 
 import Home from './pages/Home';
-import ShoppingCategories from './pages/ShoppingCategorie';
+import ShoppingCategories from './pages/ShoppingCategory.jsx';
 import SingleProduct from './pages/SingleProduct';
 import ShoppingCart from './pages/ShoppingCart';
 import Orders from './pages/Orders';

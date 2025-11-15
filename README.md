@@ -116,7 +116,7 @@ $ npm run build
 |   |   |   |-- Login.jsx
 |   |   |   |-- Orders.jsx
 |   |   |   |-- ShoppingCart.jsx
-|   |   |   |-- ShoppingCategorie.jsx
+|   |   |   |-- ShoppingCategory.jsx
 |   |   |   |-- Signup.jsx
 |   |   |   `-- SingleProduct.jsx
 |   |   |-- request-methods.js
