@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userRequest } from '../request-methods';
+import { userRequest } from '../request-methods.ts';
 import Navbar from '../layout/Navbar';
 import Announcement from '../layout/Announcement';
 import Footer from '../layout/Footer';

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../store/auth-actions';
-import { loginFailure } from '../store/auth-slice';
+import { login } from '../store/auth-actions.ts';
+import { loginFailure } from '../store/auth-slice.ts';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,6 @@ const Login = () => {
     password: '',
   });
 
-  // Редирект при успешном логине
   useEffect(() => {
     if (auth.currentUser && !auth.isFetching && !auth.error) {
       navigate('/');

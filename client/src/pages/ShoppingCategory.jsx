@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import Announcement from '../layout/Announcement';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
-import Products from '../components/Products';
+import Products from '../components/Products.tsx';
 import Newsletter from '../components/Newsletter';
-import Title from '../components/Title';
+import Title from '../components/Title.tsx';
 
 const ShoppingCategories = () => {
   const { category } = useParams();

@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {validation} from "../helpers/validation.js";
 import {InputField} from "../components/InputField.jsx";
 import {fields} from "../constants/auth/inputFields.js";
-import {register} from "../store/auth-actions.js";
+import {register} from "../store/auth-actions.ts";
 
 export const TestSignUp = () => {
   const dispatch = useDispatch();

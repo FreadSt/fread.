@@ -1,25 +1,25 @@
 import React from 'react';
-import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Route} from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 import Home from './pages/Home';
 import ShoppingCategories from './pages/ShoppingCategory.jsx';
-import SingleProduct from './pages/SingleProduct';
+import SingleProduct from './pages/SingleProduct.tsx';
 import ShoppingCart from './pages/ShoppingCart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import {AdminPanel} from "./pages/AdminPanel.jsx";
-import {publicRequest} from "./request-methods.js";
-import store from "./store/index.js";
+import store, {RootState} from "./store/index.ts";
 import {TestSignUp} from "./pages/TestSignUp.jsx";
+import {Navigate, Routes} from "react-router";
 
 const App = () => {
   const ProtectedAdminPanel = () => {
-    const user = useSelector((store) => store.auth.currentUser);
+    const user = useSelector((store: RootState) => store.auth);
     console.log('Current user in ProtectedAdminPanel:', user); // Для отладки
-    return user && user.isAdmin ? <AdminPanel /> : <Navigate to="/" />;
+    return user && user ? <AdminPanel /> : <Navigate to="/" />;
   };
     return (
     <Router>

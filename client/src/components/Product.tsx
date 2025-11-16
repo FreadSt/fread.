@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-const Product = ({ image, id }) => {
+interface ProductProps {
+    image: string
+    id: string
+}
+
+export const Product: React.FC<ProductProps> = ({ image, id }) => {
   const [overlayIsShown, setOverlayIsShown] = useState(false);
   return (
     <figure
@@ -19,10 +24,8 @@ const Product = ({ image, id }) => {
         <Link
           to={`/products/${id}`}
           className='cursor-pointer absolute top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center'
-        ></Link>
+        />
       )}
     </figure>
   );
 };
-
-export default Product;

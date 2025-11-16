@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../store/auth-actions';
-import {loginFailure} from '../store/auth-slice.js';
+import { register } from '../store/auth-actions.ts';
+import {loginFailure} from '../store/auth-slice.ts';
 
 const Signup = () => {
     const usernameRef = useRef();

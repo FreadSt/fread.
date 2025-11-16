@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { userRequest } from '../request-methods';
+import { userRequest } from '../request-methods.ts';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../layout/Navbar';
 import Announcement from '../layout/Announcement';
