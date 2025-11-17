@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Send } from '@mui/icons-material';
 
-const Newsletter = () => {
+const Newsletter: React.FC = () => {
   return (
     <section className='bg-[#FDF5F6] py-32 px-8 flex flex-col items-center'>
       <h2 className='font-bold text-5xl sm:text-6xl md:text-7xl mb-10'>

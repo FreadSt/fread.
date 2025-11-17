@@ -1,20 +1,33 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../layout/Navbar';
-import Announcement from '../layout/Announcement';
-import Footer from '../layout/Footer';
-import CartProduct from '../components/CartProduct';
+import CartProduct from '../components/CartProduct.tsx';
+import { RootState } from '../store';
+import React from "react";
 
-const ShoppingCart = () => {
-  const cart = useSelector((store) => store.cart);
+interface CartProduct {
+  _id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  image: string;
+  size: string;
+}
+
+interface CartState {
+  products: CartProduct[];
+  totalPrice: number;
+  totalQuantity: number;
+}
+
+const ShoppingCart: React.FC = () => {
+  const cart = useSelector((state: RootState) => state.cart as CartState);
   const navigate = useNavigate();
 
-  const continueShoppingClickHandler = () => {
+  const continueShoppingClickHandler = (): void => {
     navigate('/', { replace: true });
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = (): void => {
     if (cart.totalPrice > 0 && cart.products.length > 0) {
       navigate('/checkout');
     }
@@ -22,8 +35,6 @@ const ShoppingCart = () => {
 
   return (
     <>
-      <Announcement />
-      <Navbar />
       <section className='px-8 py-4'>
         <h1 className='uppercase mt-4 mb-8 text-4xl text-center'>your bag</h1>
         <div className='grid sm:grid-cols-3 gap-4 md:gap-6 lg:gap-8'>
@@ -37,7 +48,7 @@ const ShoppingCart = () => {
           </div>
           <div className='flex'>
             <p className='mr-4 cursor-pointer'>
-              Shopping Bag ({cart.totalQantity})
+              Shopping Bag ({cart.totalQuantity})
             </p>
             {/* <a className='underline cursor-pointer'>Your Wishlist (0)</a> */}
           </div>
@@ -53,8 +64,10 @@ const ShoppingCart = () => {
         </div>
         <div className='my-12 grid gap-8 lg:grid-cols-[2fr_1fr]'>
           <div>
-            {cart.products.map((product) => (
-              <CartProduct key={product._id} product={product} />
+            {cart.products.map((product: CartProduct, index) => (
+              <div key={index}>
+                <CartProduct product={product} />
+              </div>
             ))}
           </div>
           <div>
@@ -80,7 +93,6 @@ const ShoppingCart = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

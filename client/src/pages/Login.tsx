@@ -3,12 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../store/auth-actions.ts';
 import { loginFailure } from '../store/auth-slice.ts';
+import {RootState, AppDispatch} from "../store";
 
-const Login = () => {
-  const dispatch = useDispatch();
+interface UserData {
+  username: string;
+  password: string;
+}
+
+const Login: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const auth = useSelector((store) => store.auth);
-  const [formData, setFormData] = useState({
+  const auth = useSelector((store: RootState) => store.auth);
+  const [formData, setFormData] = useState<UserData>({
     username: '',
     password: '',
   });
@@ -19,15 +25,15 @@ const Login = () => {
     }
   }, [auth.currentUser, auth.isFetching, auth.error, navigate]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const formSubmitHandler = async (e) => {
+  const formSubmitHandler = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { username, password } = formData;
 
@@ -38,7 +44,6 @@ const Login = () => {
 
     try {
       await dispatch(login({ username, password }));
-      // Очищаем форму
       setFormData({
         username: '',
         password: '',
@@ -50,8 +55,7 @@ const Login = () => {
 
   return (
     <div className='px-4 w-full h-screen flex justify-center items-center bg-login bg-no-repeat bg-cover'>
-      <form
-        onSubmit={formSubmitHandler}
+      <div
         className='border bg-white p-6 flex flex-col min-w-[17rem] sm:min-w-[22rem] md:min-w-[25rem]'
       >
         <h1 className='uppercase text-xl mb-4 font-bold'>Log in</h1>
@@ -83,13 +87,14 @@ const Login = () => {
           type='submit'
           className='mb-4 bg-teal-700 text-white p-2 disabled:bg-teal-500 disabled:cursor-not-allowed'
           disabled={auth.isFetching}
+          onClick={formSubmitHandler}
         >
           Login
         </button>
         <Link to='/signup' className='capitalize underline mb-4'>
           Create a new account
         </Link>
-      </form>
+      </div>
     </div>
   );
 };

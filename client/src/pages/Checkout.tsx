@@ -4,43 +4,62 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { userRequest } from '../request-methods.ts';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../layout/Navbar';
-import Announcement from '../layout/Announcement';
-import Footer from '../layout/Footer';
+import Navbar from '../layout/Navbar.tsx';
+import Announcement from '../layout/Announcement.tsx';
+import Footer from '../layout/Footer.tsx';
+import {RootState} from "../store";
+import {cardElementOptions} from "../helpers/cardInfo.ts";
 
-// Load Stripe with your publishable key
+interface PaymentIntentResponse{
+  clientSecret: string;
+}
+
+interface CartProduct{
+  _id: string
+  title: string
+  price: number
+  quantity: number
+}
+
+interface CartState {
+  products: CartProduct[]
+  totalPrice: number
+}
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51LbSFeDby8a9HLcBzbuGETbDJiWZkCbNQx3gSpAfRZIKSrvsKakFGjvkNPTvzuHNNXKDYojDjdk3XhLlTajrQmeZ00JSyq9AOO');
 
-const CheckoutForm = () => {
+const CheckoutForm: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
-  const cart = useSelector((store) => store.cart);
-  const [error, setError] = useState(null);
-  const [processing, setProcessing] = useState(false);
-  const [clientSecret, setClientSecret] = useState('');
+  const cart = useSelector((store: RootState) => store.cart as CartState);
+  const [error, setError] = useState<string | null>(null);
+  const [processing, setProcessing] = useState<boolean>(false);
+  const [clientSecret, setClientSecret] = useState<string>('');
 
   useEffect(() => {
-    // Create payment intent when component mounts
-    const createPaymentIntent = async () => {
+    const createPaymentIntent = async (): Promise<void> => {
       try {
-        const response = await userRequest.post('/checkout/payment-intent', {
-          amount: Math.round(cart.totalPrice * 100), // Amount in cents
+        const response = await userRequest.post<PaymentIntentResponse>('/checkout/payment-intent', {
+          amount: Math.round(cart.totalPrice * 100),
           currency: 'usd',
         });
         setClientSecret(response.data.clientSecret);
-      } catch (err) {
-        setError(err.response?.data?.error || err.message || 'Failed to initialize payment');
+      } catch (err: unknown) {
+        const errorMessage =
+            (err as any).response?.data?.error ||
+            (err as Error).message ||
+            'Failed to initialize payment';
+        setError(errorMessage);
         console.error('Payment intent error:', err);
       }
     };
-
     if (cart.totalPrice > 0) {
       createPaymentIntent();
     }
   }, [cart.totalPrice]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>): Promise<void> => {
     event.preventDefault();
 
     if (!stripe || !elements || !clientSecret) {
@@ -51,49 +70,22 @@ const CheckoutForm = () => {
     setProcessing(true);
     setError(null);
 
-    const cardElement = elements.getElement(CardElement);
-
     try {
-      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            // You can add billing details here if needed
-          },
-        },
-      });
+      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret);
 
       if (confirmError) {
-        setError(confirmError.message);
+        setError(confirmError.message || 'Payment confirmation failed');
         setProcessing(false);
-      } else if (paymentIntent.status === 'succeeded') {
-        // Payment succeeded - redirect to orders page
+      } else if (paymentIntent?.status === 'succeeded') {
         navigate('/orders', { state: { paymentIntent } });
       }
     } catch (err) {
-      setError(err.message || 'Payment failed. Please try again.');
+      const errorMessage =
+          (err as Error).message ||
+          'Payment failed. Please try again.';
+      setError(errorMessage);
       setProcessing(false);
     }
-  };
-
-  const cardElementOptions = {
-    style: {
-      variables: {
-        display: 'flex',
-        flexDirection: 'column'
-      },
-      base: {
-        fontSize: '16px',
-        color: '#424770',
-        '::placeholder': {
-          color: '#aab7c4',
-        },
-      },
-      invalid: {
-        color: '#9e2146',
-      },
-    },
-    hidePostalCode: false,
   };
 
   if (!clientSecret) {
@@ -121,11 +113,10 @@ const CheckoutForm = () => {
           <h1 className="text-4xl font-bold mb-8 text-center uppercase">Checkout</h1>
           
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Payment Form */}
             <div className="border rounded-xl p-6">
               <h2 className="text-2xl font-semibold mb-6 uppercase">Payment Details</h2>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-6">
                 <div className="border rounded-lg p-4 bg-white">
                   <label className="block text-sm font-medium mb-2">Card Information</label>
                   <CardElement options={cardElementOptions}/>
@@ -138,6 +129,7 @@ const CheckoutForm = () => {
                 )}
 
                 <button
+                    onClick={handleSubmit}
                   type="submit"
                   disabled={!stripe || processing || !clientSecret}
                   className="w-full bg-teal-700 text-white py-4 px-6 rounded-lg font-semibold uppercase hover:bg-teal-800 transition ease-out duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
@@ -152,10 +144,9 @@ const CheckoutForm = () => {
                 >
                   Cancel
                 </button>
-              </form>
+              </div>
             </div>
 
-            {/* Order Summary */}
             <div className="border rounded-xl p-6 h-fit">
               <h2 className="text-2xl font-semibold mb-6 uppercase">Order Summary</h2>
 
@@ -198,12 +189,10 @@ const CheckoutForm = () => {
   );
 };
 
-// Wrap the component in Elements provider
-const Checkout = () => (
+const Checkout: React.FC = () => (
   <Elements stripe={stripePromise}>
     <CheckoutForm />
   </Elements>
 );
 
-export default Checkout;
-
+export default Checkout

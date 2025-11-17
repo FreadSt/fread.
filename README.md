@@ -93,40 +93,40 @@ $ npm run build
 |   |-- postcss.config.cjs
 |   |-- public
 |   |-- src
-|   |   |-- App.jsx
+|   |   |-- App.tsx
 |   |   |-- assets
 |   |   |-- components
-|   |   |   |-- Carousel.jsx
-|   |   |   |-- CartProduct.jsx
-|   |   |   |-- Category.jsx
-|   |   |   |-- Categories.jsx
-|   |   |   |-- Filter.jsx
-|   |   |   |-- Newsletter.jsx
-|   |   |   |-- Product.jsx
-|   |   |   |-- Products.jsx
-|   |   |   `-- Title.jsx
+|   |   |   |-- Carousel.tsx
+|   |   |   |-- CartProduct.tsx
+|   |   |   |-- Category.tsx
+|   |   |   |-- Categories.tsx
+|   |   |   |-- Filter.tsx
+|   |   |   |-- Newsletter.tsx
+|   |   |   |-- Product.tsx
+|   |   |   |-- Products.tsx
+|   |   |   `-- Title.tsx
 |   |   |-- index.css
 |   |   |-- layout
-|   |   |   |-- Announcement.jsx
-|   |   |   |-- Footer.jsx
-|   |   |   `-- Navbar.jsx
-|   |   |-- main.jsx
+|   |   |   |-- Announcement.tsx
+|   |   |   |-- Footer.tsx
+|   |   |   `-- Navbar.tsx
+|   |   |-- main.tsx
 |   |   |-- pages
-|   |   |   |-- Home.jsx
-|   |   |   |-- Login.jsx
-|   |   |   |-- Orders.jsx
-|   |   |   |-- ShoppingCart.jsx
-|   |   |   |-- ShoppingCategory.jsx
+|   |   |   |-- Home.tsx
+|   |   |   |-- Login.tsx
+|   |   |   |-- Orders.tsx
+|   |   |   |-- ShoppingCart.tsx
+|   |   |   |-- ShoppingCategory.tsx
 |   |   |   |-- Signup.jsx
 |   |   |   `-- SingleProduct.jsx
-|   |   |-- request-methods.js
+|   |   |-- request-methods.ts
 |   |   `-- store
-|   |       |-- auth-actions.js
-|   |       |-- auth-slice.js
-|   |       |-- cart-slice.js
-|   |       `-- index.js
+|   |       |-- auth-actions.ts
+|   |       |-- auth-slice.ts
+|   |       |-- cart-slice.ts
+|   |       `-- index.ts
 |   |-- tailwind.config.cjs
-|   `-- vite.config.js
+|   `-- vite.config.ts
 `-- server
     |-- controllers
     |   |-- auth.js
@@ -138,7 +138,7 @@ $ npm run build
     |   |-- cleanup-script.js
     |   |-- fake-api-products.json
     |   `-- products.json
-    |-- index.js
+    |-- index.ts
     |-- middlewares
     |   `-- verifyToken.js
     |-- models

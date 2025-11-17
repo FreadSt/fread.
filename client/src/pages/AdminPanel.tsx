@@ -1,64 +1,95 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { userRequest } from '../request-methods.ts';
-import Navbar from '../layout/Navbar';
-import Announcement from '../layout/Announcement';
-import Footer from '../layout/Footer';
 
-export const AdminPanel = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((store) => store.auth.currentUser);
-  const [product, setProduct] = useState({
-    title: '',
-    description: '',
-    image: '',
-    categories: [],
-    size: [],
-    color: [],
-    price: '',
-    inStock: true,
+interface Product {
+  title: string;
+  description: string;
+  image: string;
+  categories: string[];
+  size: string[];
+  color: string[];
+  price: number;
+  inStock: boolean;
+}
+
+interface AdminPanelState {
+  product: Product;
+  message: string;
+}
+
+export const AdminPanel:React.FC = () => {
+  const [state, setState] = useState<AdminPanelState>({
+    product: {
+      title: '',
+      description: '',
+      image: '',
+      categories: [],
+      size: [],
+      color: [],
+      price: 0,
+      inStock: true,
+    },
+    message: '',
   });
-  const [message, setMessage] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     const { name, value } = e.target;
-    setProduct((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleArrayInputChange = (e, field) => {
-    const { value } = e.target;
-    setProduct((prev) => ({
+    setState((prev) => ({
       ...prev,
-      [field]: value.split(',').map((item) => item.trim()),
+      product: { ...prev.product, [name]: value },
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleArrayInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof Product
+  ): void => {
+    const { value } = e.target;
+    setState((prev) => ({
+      ...prev,
+      product: {
+        ...prev.product,
+        [field]: value.split(',').map((item) => item.trim()),
+      },
+    }));
+  };
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     try {
-      const response = await userRequest.post('/products', product);
-      setMessage('Product added successfully!');
-      setProduct({
-        title: '',
-        description: '',
-        image: '',
-        categories: [],
-        size: [],
-        color: [],
-        price: '',
-        inStock: true,
-      });
-    } catch (error) {
-      setMessage('Error adding product: ' + (error.response?.data?.message || error.message));
+      await userRequest.post('/products', state.product);
+      setState((prev) => ({
+        ...prev,
+        message: 'Product added successfully!',
+        product: {
+          title: '',
+          description: '',
+          image: '',
+          categories: [],
+          size: [],
+          color: [],
+          price: 0,
+          inStock: true,
+        },
+      }));
+    } catch (error: unknown) {
+      const errorMessage =
+        (error as any).response?.data?.message ||
+        (error as Error).message ||
+        'Error adding product';
+      setState((prev) => ({
+        ...prev,
+        message: 'Error adding product: ' + errorMessage,
+      }));
     }
   };
 
-  if (!user || !user.isAdmin) return null; // Дополнительная проверка на клиенте
-
   return (
     <>
-      <Announcement />
-      <Navbar />
       <section className='p-8'>
         <h1 className='text-3xl mb-4'>Admin Panel</h1>
         <form onSubmit={handleSubmit} className='max-w-lg'>
@@ -67,7 +98,7 @@ export const AdminPanel = () => {
             <input
               type='text'
               name='title'
-              value={product.title}
+              value={state.product.title}
               onChange={handleInputChange}
               className='w-full p-2 border'
               required
@@ -78,7 +109,7 @@ export const AdminPanel = () => {
             <input
               type='text'
               name='description'
-              value={product.description}
+              value={state.product.description}
               onChange={handleInputChange}
               className='w-full p-2 border'
               required
@@ -89,7 +120,7 @@ export const AdminPanel = () => {
             <input
               type='text'
               name='image'
-              value={product.image}
+              value={state.product.image}
               onChange={handleInputChange}
               className='w-full p-2 border'
               required
@@ -99,7 +130,7 @@ export const AdminPanel = () => {
             <label className='block mb-2'>Categories (comma-separated)</label>
             <input
               type='text'
-              value={product.categories.join(', ')}
+              value={state.product.categories.join(', ')}
               onChange={(e) => handleArrayInputChange(e, 'categories')}
               className='w-full p-2 border'
               placeholder='e.g., shoes, man, casual'
@@ -109,7 +140,7 @@ export const AdminPanel = () => {
             <label className='block mb-2'>Sizes (comma-separated)</label>
             <input
               type='text'
-              value={product.size.join(', ')}
+              value={state.product.size.join(', ')}
               onChange={(e) => handleArrayInputChange(e, 'size')}
               className='w-full p-2 border'
               placeholder='e.g., s, m, l'
@@ -119,7 +150,7 @@ export const AdminPanel = () => {
             <label className='block mb-2'>Colors (comma-separated)</label>
             <input
               type='text'
-              value={product.color.join(', ')}
+              value={state.product.color.join(', ')}
               onChange={(e) => handleArrayInputChange(e, 'color')}
               className='w-full p-2 border'
               placeholder='e.g., black, white'
@@ -130,8 +161,16 @@ export const AdminPanel = () => {
             <input
               type='number'
               name='price'
-              value={product.price}
-              onChange={(e) => setProduct((prev) => ({ ...prev, price: Number(e.target.value) }))}
+              value={state.product.price}
+              onChange={(e) =>
+                setState((prev) => ({
+                  ...prev,
+                  product: {
+                    ...prev.product,
+                    price: Number(e.target.value),
+                  },
+                }))
+              }
               className='w-full p-2 border'
               required
             />
@@ -141,8 +180,16 @@ export const AdminPanel = () => {
             <input
               type='checkbox'
               name='inStock'
-              checked={product.inStock}
-              onChange={(e) => setProduct((prev) => ({ ...prev, inStock: e.target.checked }))}
+              checked={state.product.inStock}
+              onChange={(e) =>
+                setState((prev) => ({
+                  ...prev,
+                  product: {
+                    ...prev.product,
+                    inStock: e.target.checked,
+                  },
+                }))
+              }
             />
           </div>
           <button
@@ -151,10 +198,9 @@ export const AdminPanel = () => {
           >
             Add Product
           </button>
-          {message && <p className='mt-4 text-red-700'>{message}</p>}
+          {state.message && <p className='mt-4 text-red-700'>{state.message}</p>}
         </form>
       </section>
-      <Footer />
     </>
   );
 };

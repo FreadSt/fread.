@@ -7,10 +7,10 @@ import { useDispatch } from 'react-redux';
 import { publicRequest } from '../request-methods.ts';
 import { addProduct } from '../store/cart-slice.ts';
 
-import Navbar from '../layout/Navbar';
-import Announcement from '../layout/Announcement';
-import Footer from '../layout/Footer';
-import Newsletter from '../components/Newsletter';
+import Navbar from '../layout/Navbar.tsx';
+import Announcement from '../layout/Announcement.tsx';
+import Footer from '../layout/Footer.tsx';
+import Newsletter from '../layout/Newsletter.tsx';
 
 interface Product {
   _id: string;

@@ -1,5 +1,12 @@
-export const validation = (data) => {
-  const errors = {};
+interface ValidationData {
+  name: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+export const validation = (data: ValidationData): Partial<ValidationData> => {
+  const errors: Partial<ValidationData> = {};
 
   if (!data.name) {
     errors.name = "Username";

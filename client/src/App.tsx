@@ -1,60 +1,80 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from "react-router-dom";
-import { useSelector } from 'react-redux';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Login from './pages/Login.tsx';
+import {AdminPanel} from "./pages/AdminPanel.js";
+import {SignUp} from "./pages/SignUp.tsx";
+import {Layout} from "./layout.tsx";
+import {LoadingFallback} from "./pages/LoadingFallback.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
-import Home from './pages/Home';
-import ShoppingCategories from './pages/ShoppingCategory.jsx';
-import SingleProduct from './pages/SingleProduct.tsx';
-import ShoppingCart from './pages/ShoppingCart';
-import Checkout from './pages/Checkout';
-import Orders from './pages/Orders';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
-import {AdminPanel} from "./pages/AdminPanel.jsx";
-import store, {RootState} from "./store/index.ts";
-import {TestSignUp} from "./pages/TestSignUp.jsx";
-import {Navigate, Routes} from "react-router";
+const Home = React.lazy(() => import('./pages/Home.js'));
+const Cart = React.lazy(() => import('./pages/ShoppingCart.tsx'));
+const Checkout = React.lazy(() => import('./pages/Checkout.tsx'));
+const Orders = React.lazy(() => import('./pages/Orders.jsx'));
+const ShoppingCategory = React.lazy(() => import('./pages/ShoppingCategory.tsx'));
 
-const App = () => {
-  const ProtectedAdminPanel = () => {
-    const user = useSelector((store: RootState) => store.auth);
-    console.log('Current user in ProtectedAdminPanel:', user); // Для отладки
-    return user && user ? <AdminPanel /> : <Navigate to="/" />;
-  };
-    return (
-    <Router>
+const Suspense: React.FC<{ children: React.ReactElement }> = ({ children }) => (
+  <React.Suspense fallback={<LoadingFallback />}>{children}</React.Suspense>
+);
+
+export const App: React.FC = () => {
+  return (
+    <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/categories/:category' element={<ShoppingCategories/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/signup' element={<TestSignUp/>}/>
-        <Route path='/categories/:category' element={<ShoppingCategories/>}/>
-        <Route path='/products/:id' element={<SingleProduct/>}/>
-        <Route path='/cart' element={<ShoppingCart/>}/>
-        <Route path='/checkout' element={<Checkout/>}/>
-        <Route path='/orders' element={<Orders/>}/>
-        <Route path='/adminpanel' element={<ProtectedAdminPanel />} />
+        <Route element={<Layout />}>
+          <Route
+            path="/"
+            element={
+              <Suspense>
+                <Home />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/categories/:category"
+            element={
+              <Suspense>
+                <ShoppingCategory />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <Suspense>
+                <Cart />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <React.Suspense >
+                <Checkout />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <React.Suspense>
+                <Orders />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="/adminpanel"
+            element={
+              <ProtectedRoute>
+                <AdminPanel />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
-        {/*<Route path='/categories/:category'>*/}
-        {/*  <ShoppingCategories />*/}
-        {/*</Route>*/}
-        {/*<Route path='/products/:id'>*/}
-        {/*  <SingleProduct />*/}
-        {/*</Route>*/}
-        {/*<Route path='/cart'>*/}
-        {/*  <ShoppingCart />*/}
-        {/*</Route>*/}
-        {/*<Route path='/orders'>*/}
-        {/*  <Orders />*/}
-        {/*</Route>*/}
-        {/*<Route path='/login'>{user ? <Redirect to='/' /> : <Login />}</Route>*/}
-        {/*<Route path='/signup'>*/}
-        {/*  <Signup />*/}
-        {/*</Route>*/}
-        {/*<Route path={'/adminpanel'}>*/}
-        {/*  <AdminPanel/>*/}
-        {/*</Route>*/}
-    </Router>
+    </BrowserRouter>
   );
 };
 

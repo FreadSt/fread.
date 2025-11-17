@@ -4,18 +4,22 @@ import { ShoppingCart } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutUser } from '../store/auth-actions';
+import { RootState, AppDispatch } from '../store';
 
-const Navbar = () => {
-  const totalQuantity = useSelector((store) => store.cart.totalQuantity);
-  const currentUser = useSelector((store) => store.auth.currentUser); // Берем весь объект
-  const dispatch = useDispatch();
+const Navbar: React.FC = () => {
+  const totalQuantity = useSelector(
+    (store: RootState) => store.cart.totalQuantity
+  );
+  const currentUser = useSelector(
+    (store: RootState) => store.auth.currentUser
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     dispatch(logoutUser());
   };
 
-  // Проверяем, есть ли currentUser и извлекаем username
-  const user = currentUser ? currentUser.username : null;
+  const user = currentUser ? currentUser.name : null;
 
   return (
     <nav className='grid grid-cols-2 p-4 border-b font-semibold h-18'>

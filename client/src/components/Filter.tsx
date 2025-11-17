@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Filter = ({ filterChangeHandler }) => {
+interface FilterProps {
+  filterChangeHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void
+}
+
+const Filter = ({ filterChangeHandler }: FilterProps) => {
   return (
     <section className='px-8 pb-8 md:flex justify-between items-center'>
       <div>

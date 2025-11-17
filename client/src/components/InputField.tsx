@@ -1,6 +1,16 @@
 import React from "react";
 
-export const InputField = ({ label, name, type = "text", value, error, onChange }) => {
+interface FieldProps {
+    label: string;
+    name: string;
+    placeholder?: string;
+    type: string;
+    value: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    error?: string;
+}
+
+export const InputField: React.FC<FieldProps> = ({ label, name, type, value, error, onChange }) => {
   return (
     <div style={{ marginBottom: "12px" }}>
       {label && <label style={{ display: "block", marginBottom: "4px" }}>{label}</label>}
