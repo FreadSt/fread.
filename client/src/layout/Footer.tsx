@@ -24,8 +24,8 @@ const Footer: React.FC = () => {
   ];
 
   const contactItems: ContactItem[] = [
-    { icon: <Place className='mr-4' />, text: 'Cairo, Egypt' },
-    { icon: <LocalPhone className='mr-4' />, text: '+201154251620' },
+    { icon: <Place className='mr-4' />, text: 'Kyiv, Ukraine' },
+    { icon: <LocalPhone className='mr-4' />, text: '+380999999999' },
     { icon: <MailOutline className='mr-4' />, text: 'kholiawkodev@gmail.com' },
   ];
 

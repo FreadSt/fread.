@@ -58,22 +58,17 @@ const SingleProduct = () => {
   if (!product) {
     return (
       <>
-        <Announcement />
-        <Navbar />
         <section className='p-8'>
           <p>Loading...</p>
         </section>
-        <Footer />
       </>
     );
   }
   
   return (
     <>
-      <Announcement />
-      <Navbar />
       <section className='p-8 grid md:grid-cols-2 gap-8'>
-        <div className='grow'>
+        <div className='grow border-2 border-gray-200 p-4'>
           <img
             src={product.image}
             alt={product.title}
@@ -133,8 +128,6 @@ const SingleProduct = () => {
           </div>
         </div>
       </section>
-      <Newsletter />
-      <Footer />
     </>
   );
 };

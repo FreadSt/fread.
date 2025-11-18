@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { ArrowLeft, ArrowRight } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import img1 from '../assets/images/photo1.webp'
 
 interface CarouselItem {
     url: string
@@ -9,7 +10,7 @@ interface CarouselItem {
 
 const CAROUSEL_DATA: CarouselItem[] = [
   {
-    url: 'https://images.unsplash.com/photo-1523380744952-b7e00e6e2ffa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    url: img1 as string,
   },
   {
     url: 'https://images.unsplash.com/photo-1550995694-3f5f4a7e1bd2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
