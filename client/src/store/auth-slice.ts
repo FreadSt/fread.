@@ -3,16 +3,16 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
   _id: string;
-  email: string
-  name?: string
-  role?: 'user' | 'admin';
+  email: string;
+  username: string;
+  isAdmin: boolean;
 }
 
 interface AuthState {
   token: string | null;
   isFetching: boolean;
   currentUser: User | null;
-  error: boolean
+  error: boolean;
   errorMessage: string | null;
 }
 
@@ -21,9 +21,7 @@ interface LoginSuccessPayload {
   token: string;
 }
 
-interface LoginFailurePayload {
-  message?: string;
-}
+type AuthErrorPayload = string | { message?: string };
 
 const initialState: AuthState = {
   currentUser: null,
@@ -37,12 +35,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginStart(state) {
+    loginStart(state): void {
       state.isFetching = true;
       state.error = false;
       state.errorMessage = null;
     },
-    loginSuccess(state, action: PayloadAction<LoginSuccessPayload>) {
+    loginSuccess(state, action: PayloadAction<LoginSuccessPayload>): void {
       console.log(action.payload, 'payload user');
       state.isFetching = false;
       state.currentUser = action.payload.user;
@@ -50,29 +48,52 @@ const authSlice = createSlice({
       state.error = false;
       state.errorMessage = null;
     },
-    loginFailure(state, action: PayloadAction<LoginFailurePayload | string>) {
+    loginFailure(state, action: PayloadAction<AuthErrorPayload>): void {
       state.isFetching = false;
       state.error = true;
-      state.errorMessage = typeof action.payload === 'string' 
-        ? action.payload 
-        : action.payload?.message || 'Operation failed';
+      state.errorMessage =
+        typeof action.payload === 'string'
+          ? action.payload
+          : action.payload?.message || 'Login failed';
     },
-    registerSuccess(state, action: PayloadAction<LoginSuccessPayload>) {
+    registerStart(state): void {
+      state.isFetching = true;
+      state.error = false;
+      state.errorMessage = null;
+    },
+    registerSuccess(state, action: PayloadAction<LoginSuccessPayload>): void {
       state.isFetching = false;
       state.currentUser = action.payload.user;
       state.token = action.payload.token;
       state.error = false;
       state.errorMessage = null;
     },
-    logout(state) {
+    registerFailure(state, action: PayloadAction<AuthErrorPayload>): void {
+      state.isFetching = false;
+      state.error = true;
+      state.errorMessage =
+        typeof action.payload === 'string'
+          ? action.payload
+          : action.payload?.message || 'Registration failed';
+    },
+    logout(state): void {
       state.currentUser = null;
       state.token = null;
       state.error = false;
       state.errorMessage = null;
+      state.isFetching = false;
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, registerSuccess, logout } = authSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  registerStart,
+  registerSuccess,
+  registerFailure,
+  logout,
+} = authSlice.actions;
 
 export default authSlice;

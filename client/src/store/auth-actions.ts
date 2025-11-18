@@ -1,4 +1,12 @@
-import {loginStart, loginSuccess, loginFailure, registerSuccess, logout} from './auth-slice.ts';
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  registerSuccess,
+  logout,
+  registerStart,
+  registerFailure
+} from './auth-slice.ts';
 import { publicRequest } from '../request-methods.ts';
 import {Dispatch} from "@reduxjs/toolkit";
 
@@ -43,7 +51,7 @@ export const login = (credentials: LoginCredentials) => {
 
 export const register = (credentials: RegisterCredentials) => {
   return async (dispatch: Dispatch) => {
-    dispatch(loginStart());
+    dispatch(registerStart());
     try {
       const response = await publicRequest<AuthResponse>('/auth/register', {
         method: 'POST',
@@ -53,42 +61,14 @@ export const register = (credentials: RegisterCredentials) => {
       localStorage.setItem('token', token);
       dispatch(registerSuccess({ user, token }));
     } catch (err: any) {
-      dispatch(registerSuccess(err.message || 'Register failed'));
+      dispatch(registerFailure(err.message || 'Register failed'));
     }
   };
 };
 
-// export const register = (credentials) => {
-//   return async (dispatch) => {
-//     dispatch(loginStart());
-//     try {
-//       const response = await publicRequest.post('/auth/register', credentials);
-//       const { user, token } = response.data; // Ожидаем { user, token } от сервера
-//       localStorage.setItem('token', token); // Сохраняем токен
-//       dispatch(registerSuccess({ user, token }));
-//     } catch (err) {
-//       dispatch(loginFailure(err.response?.data?.message || 'Registration failed'));
-//     }
-//   };
-// };
-
-// export const refreshToken = () => async (dispatch) => {
-//   try {
-//     const response = await publicRequest.post('/auth/refresh', null, {
-//       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-//     });
-//     const { token } = response.data;
-//     localStorage.setItem('token', token);
-//     const decoded = jwtDecode(token); // Предполагаем, что у вас есть библиотека jwt-decode
-//     dispatch(loginSuccess(decoded));
-//   } catch (error) {
-//     console.log('Error refreshing token:', error);
-//   }
-// };
-//
 export const logoutUser = () => {
   return (dispatch: Dispatch) => {
-    localStorage.removeItem('token'); // Удаляем токен
+    localStorage.removeItem('token');
     dispatch(logout());
   };
 };

@@ -19,7 +19,6 @@ const Navbar: React.FC = () => {
     dispatch(logoutUser());
   };
 
-  const user = currentUser ? currentUser.name : null;
 
   return (
     <nav className='grid grid-cols-2 p-4 border-b font-semibold h-18'>
@@ -27,9 +26,10 @@ const Navbar: React.FC = () => {
         <Link to='/'>fread.</Link>
       </h1>
       <div className='flex justify-end items-center px-4 text-md md:text-lg'>
-        {user ? (
+        {currentUser ? (
           <>
-            <span className='px-4 py-2 capitalize'>Hello, {user}</span>
+            <span className='px-4 py-2 capitalize'>Hello, {currentUser.username}</span>
+            {currentUser.isAdmin && <Link to={'/adminpanel'}>Admin Panel</Link> }
             <button
               onClick={handleLogout}
               className='uppercase px-4 py-2 text-teal-700'
