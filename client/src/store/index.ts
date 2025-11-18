@@ -1,4 +1,4 @@
-import { configureStore, combineReducers, PreloadedState } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
 import cartSlice from './cart-slice';
 import authSlice from './auth-slice';
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   chat: chatSlice.reducer,
 });
 
-type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>;
 
 const persistConfig: PersistConfig<RootState> = {
   key: 'root',
