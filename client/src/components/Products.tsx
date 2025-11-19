@@ -32,6 +32,7 @@ const Products: React.FC<ProductProps> = ({ category, filter }) => {
       console.log('Request URL:', url);
       const response = await publicRequest<Product[]>(url);
       console.log('Response data:', response);
+      console.log(response[0].image, 'image')
       setData(response || []);
     } catch (error) {
       console.error('Error fetching products:', error);

@@ -2,8 +2,8 @@ import React from 'react';
 
 const Announcement: React.FC = () => {
   return (
-    <div className='bg-teal-700 text-white text-center py-1 px-4 h-8'>
-      Super Deal! Free Shipping on Orders Over $50
+    <div className='bg-teal-900 text-white text-center py-1 px-4 h-8'>
+      Get discount up to 15% for summer collection
     </div>
   );
 };
