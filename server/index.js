@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo');
 const session = require('express-session');
 const path = require('node:path');
 const http = require('http');
+const cors = require('cors');
 
 const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
@@ -19,9 +20,22 @@ const Message = require('./models/Message');
 
 const app = express();
 const server = http.createServer(app);
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
+
 const io = socketIo(server, {
-  cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] },
+  cors: { origin: allowedOrigins, methods: ['GET', 'POST'] },
 });
+
 
 app.use(logger('[:date[clf]] Request :method :url', { immediate: true }));
 app.use(
