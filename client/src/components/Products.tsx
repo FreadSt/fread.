@@ -24,8 +24,6 @@ const Products: React.FC<ProductProps> = ({ category, filter }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [data, setData] = useState<Product[]>([]);
 
-  fetch('https://fread.onrender.com/api').then((res) => res.json()).then((data) => console.log(data))
-
   const getProducts = useCallback(async () => {
     try {
       const url = category 
