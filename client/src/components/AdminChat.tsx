@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Send } from '@mui/icons-material';
+import {Refresh, Send} from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { RootState, AppDispatch } from '../store';
 import {
@@ -131,52 +131,58 @@ export const AdminChat: React.FC = () => {
   );
 
   return (
-    <div className='grid grid-cols-4 gap-4 max-h-screen p-4'>
-      <AdminChatTicketList
-        tickets={tickets}
-        selectedTicketId={selectedTicketId}
-        loading={loading}
-        onSelectTicket={handleSelectTicket}
-        onRefresh={loadTickets}
-      />
+    <div className='bg-white rounded-lg shadow-md overflow-hidden w-full'>
+      <div className='flex border-b items-center justify-between p-3'>
+        <div>
+          <h3 className='text-lg font-semibold'>Support Tickets</h3>
+          <p className='text-xs text-gray-500'>{tickets?.length || 0} active</p>
+        </div>
+        <IconButton onClick={loadTickets} disabled={loading} size='small' sx={{ color: CHAT_STYLES.PRIMARY_COLOR }}>
+          <Refresh />
+        </IconButton>
+      </div>
 
-      <div className='col-span-3 bg-white rounded-lg shadow-md flex flex-col overflow-hidden h-[70vh] w-full'>
-        {selectedTicket ? (
-          <>
-            <AdminChatHeader ticket={selectedTicket} />
-            <AdminChatMessages
-              messages={sortedMessages}
-              messagesEndRef={messagesEndRef}
-              onEmpty={CHAT_MESSAGES.NO_MESSAGES}
-            />
-            <div className='border-t p-3 flex gap-2'>
-              <input
-                type='text'
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder={CHAT_MESSAGES.REPLY_PLACEHOLDER}
-                className='flex-1 p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-teal-500'
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-0'>
+        <div className='md:col-span-1 border-r h-[60vh] overflow-y-auto bg-gray-50'>
+          <AdminChatTicketList
+            tickets={tickets}
+            selectedTicketId={selectedTicketId}
+            loading={loading}
+            onSelectTicket={handleSelectTicket}
+            onRefresh={loadTickets}
+          />
+        </div>
+
+        <div className='md:col-span-3 flex flex-col h-[60vh]'>
+          {selectedTicket ? (
+            <>
+              <AdminChatHeader ticket={selectedTicket} />
+              <AdminChatMessages
+                messages={sortedMessages}
+                messagesEndRef={messagesEndRef}
+                onEmpty={CHAT_MESSAGES.NO_MESSAGES}
               />
-              <IconButton
-                onClick={handleSend}
-                disabled={!input.trim()}
-                sx={{
-                  color: CHAT_STYLES.PRIMARY_COLOR,
-                  '&:hover': {
-                    backgroundColor: `rgba(13, 148, 136, 0.1)`,
-                  },
-                }}
-              >
-                <Send />
-              </IconButton>
+
+              <div className='border-t p-3 flex gap-2 items-center'>
+                <input
+                  type='text'
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={CHAT_MESSAGES.REPLY_PLACEHOLDER}
+                  className='flex-1 p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-300'
+                />
+                <IconButton onClick={handleSend} disabled={!input.trim()} sx={{ color: CHAT_STYLES.PRIMARY_COLOR }}>
+                  <Send />
+                </IconButton>
+              </div>
+            </>
+          ) : (
+            <div className='flex items-center justify-center h-full text-gray-500 p-6'>
+              <p>{CHAT_MESSAGES.SELECT_TICKET}</p>
             </div>
-          </>
-        ) : (
-          <div className='flex items-center justify-center h-full text-gray-500'>
-            <p>{CHAT_MESSAGES.SELECT_TICKET}</p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
