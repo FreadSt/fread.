@@ -22,7 +22,7 @@ interface Props {
 }
 
 const AdminChatTicketList: React.FC<Props> = ({tickets, selectedTicketId, loading, onSelectTicket, onRefresh,}) => (
-  <div className='col-span-1 bg-white rounded-lg shadow-md overflow-y-auto'>
+  <div className='col-span-1 bg-white shadow-md overflow-y-auto'>
     <div className='p-4 border-b sticky top-0 bg-white flex justify-between items-center'>
       <div>
         <h2 className='text-xl font-bold'>Support Tickets</h2>
