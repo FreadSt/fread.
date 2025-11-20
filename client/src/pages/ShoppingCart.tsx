@@ -23,10 +23,11 @@ const ShoppingCart: React.FC = () => {
   };
 
   const handleClear = (): void => {
-    if(cart.products) {
-      dispatch(clearCart(cart.products));
+    if (cart.products.length > 0) {
+      dispatch(clearCart());
     }
   }
+
   return (
     <>
       <section className='px-8 py-4 xs:px-3'>
