@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
           {contactItems.map((item, index) => (
             <li key={index} className='flex items-center'>
               {item.icon}
-              <span>{item.text}</span>
+              <span className='truncate max-w-[150px] md:maxw-[200px] lg:max-w-none'>{item.text}</span>
             </li>
           ))}
         </ul>
