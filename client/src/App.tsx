@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from './pages/Login.tsx';
 import {AdminPanel} from "./pages/AdminPanel.js";
@@ -7,6 +7,7 @@ import {Layout} from "./layout.tsx";
 import {LoadingFallback} from "./pages/LoadingFallback.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import {CategoriesPage} from "./pages/CategoriesPage.tsx";
+import ScrollToTop from "./components/ScrollToTop.tsx";
 
 const Home = React.lazy(() => import('./pages/Home.js'));
 const Cart = React.lazy(() => import('./pages/ShoppingCart.tsx'));
@@ -22,6 +23,7 @@ const Suspense: React.FC<{ children: React.ReactElement }> = ({ children }) => (
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route

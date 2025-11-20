@@ -26,8 +26,8 @@ const Products: React.FC<ProductProps> = ({ category, filter }) => {
 
   const getProducts = useCallback(async () => {
     try {
-      const url = category 
-        ? `/products?category=${encodeURIComponent(category)}` 
+      const url = category
+        ? `/products?category=${encodeURIComponent(category)}`
         : '/products';
       console.log('Request URL:', url);
       const response = await publicRequest<Product[]>(url);
@@ -43,7 +43,7 @@ const Products: React.FC<ProductProps> = ({ category, filter }) => {
     if (!filter || Object.keys(filter).length === 0) {
       return data;
     }
-    
+
     return data.filter((product) => {
       return Object.entries(filter).every(([key, value]) => {
         const productValue = product[key as keyof Product];
@@ -62,12 +62,12 @@ const Products: React.FC<ProductProps> = ({ category, filter }) => {
 
   return (
       <section
-          className='pb-8 mx-8 grid gap-2 md:grid-cols-2 lg:grid-cols-4'
+          className='pb-8 mx-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4'
           id='products'
       >
         {products.map((product) => (
-            <div key={product._id}>
-              <ProductComponent image={product.image} id={product._id} />
+            <div key={product._id} id={product._id}>
+              <ProductComponent image={product.image} id={product._id}  price={product.price}  title={product.title} />
             </div>
         ))}
       </section>

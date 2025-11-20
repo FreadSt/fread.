@@ -1,50 +1,85 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import { useDispatch } from 'react-redux';
+import { removeProduct, updateProductQuantity } from '../store/cart-slice';
+import { AppDispatch } from '../store';
+import { CartProduct as CartProductType } from '../types/index';
+import { Add, Remove, Delete } from '@mui/icons-material';
+import {Link} from "react-router-dom";
 
-interface Product {
-  image: string;
-  title: string;
-  _id: string;
-  size: string;
-  quantity: number;
-  price: number;
+interface Props {
+  product: CartProductType;
 }
 
-interface CartProductProps {
-  product: Product;
-}
+const CartProduct: React.FC<Props> = ({ product }) => {
+  const dispatch = useDispatch<AppDispatch>();
 
-const CartProduct: React.FC<CartProductProps> = ({ product }) => {
+  const handleRemove = useCallback(() => {
+    dispatch(removeProduct({ _id: product._id, size: product.size }));
+  }, [product._id, product.size, dispatch]);
+
+  const handleQuantityChange = useCallback(
+    (newQuantity: number) => {
+      if (newQuantity > 0) {
+        dispatch(
+          updateProductQuantity({
+            _id: product._id,
+            size: product.size,
+            quantity: newQuantity,
+          })
+        );
+      }
+    },
+    [product._id, product.size, dispatch]
+  );
+
+
+  console.log(product, 'product')
+
   return (
-    <div className='flex flex-col md:flex-row justify-between mb-4'>
-      <div className='flex flex-col md:flex-row'>
-        <div className='md:mr-8 mb-8 md:mb-0'>
+    <div className='border-b pb-6 mb-6'>
+      <div className='grid grid-cols-4 gap-4 xs:gap-2 xs:grid-cols-4'>
+        <Link to={`/products/${product._id}`}>
           <img
-            className='w-full h-full md:w-64 md:h-64'
             src={product.image}
-            alt='product-image'
+            alt={product.title}
+            className='w-full h-40 object-cover rounded'
           />
-        </div>
-        <div>
-          <div className='mb-6'>
-            <span className='font-bold'>Product:</span> {product.title}
+        </Link>
+
+        <div className='col-span-2'>
+          <h3 className='font-semibold text-lg mb-2'>{product.title}</h3>
+          <p className='text-sm text-gray-600 mb-2'>Size: {product.size || 'One Size'}</p>
+          <p className='text-sm text-gray-600 mb-4'>Price: ${product.price.toFixed(2)}</p>
+
+          <div className='flex items-center gap-2 mb-4'>
+            <button
+              onClick={() => handleQuantityChange(product.quantity - 1)}
+              className='p-1 hover:bg-gray-200 rounded'
+              disabled={product.quantity <= 1}
+            >
+              <Remove fontSize='small' />
+            </button>
+            <span className='px-4 py-1 border rounded'>{product.quantity}</span>
+            <button
+              onClick={() => handleQuantityChange(product.quantity + 1)}
+              className='p-1 hover:bg-gray-200 rounded'
+            >
+              <Add fontSize='small' />
+            </button>
           </div>
-          <div className='mb-6'>
-            <span className='font-bold'>ID:</span> {product._id}
-          </div>
-          <div className='mb-6'>
-            <span className='font-bold'>Size:</span> {product.size}
-          </div>
         </div>
-      </div>
-      <div className='flex flex-col items-center justify-center'>
-        <div className='flex items-center justify-start mb-8'>
-          <span className='mx-2 text-xl h-10 w-10 rounded-2xl border flex justify-center items-center'>
-            {product.quantity}
-          </span>
+
+        <div className='flex flex-col items-end justify-between'>
+          <p className='font-bold text-lg'>
+            ${(product.price * product.quantity).toFixed(2)}
+          </p>
+          <button
+            onClick={handleRemove}
+            className='text-red-500 hover:text-red-700 transition'
+          >
+            <Delete />
+          </button>
         </div>
-        <span className='block mb-6 text-4xl'>
-          $ {product.quantity * product.price}
-        </span>
       </div>
     </div>
   );
