@@ -64,7 +64,7 @@ export const Product: React.FC<ProductProps> = React.memo(
               onClick={handleAddToCart}
               className="w-full border-2 border-black text-gray-700 py-4 px-6 font-semibold uppercase hover:bg-gray-900 hover:text-white transition ease-out duration-300"
             >
-              <ShoppingCart size={18}/>
+              <ShoppingCart/>
               Add to Cart
             </button>
           </div>
