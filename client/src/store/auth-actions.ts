@@ -69,6 +69,8 @@ export const register = (credentials: RegisterCredentials) => {
 export const logoutUser = () => {
   return (dispatch: Dispatch) => {
     localStorage.removeItem('token');
+    localStorage.removeItem('cart');
+    localStorage.removeItem('guestCart');
     dispatch(logout());
   };
 };

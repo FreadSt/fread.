@@ -5,6 +5,7 @@ const initialState: CartState = {
   products: [],
   totalQuantity: 0,
   totalPrice: 0,
+  userId: undefined,
 };
 
 const cartSlice = createSlice({
@@ -13,7 +14,6 @@ const cartSlice = createSlice({
   reducers: {
     addProduct(state, action: PayloadAction<CartProduct>) {
       const product = action.payload;
-
       const existingProduct = state.products.find(
         (p) => p._id === product._id && p.size === product.size
       );
@@ -66,8 +66,59 @@ const cartSlice = createSlice({
       state.totalQuantity = 0;
       state.totalPrice = 0;
     },
+
+    clearCartOnLogout(state) {
+      state.products = [];
+      state.totalQuantity = 0;
+      state.totalPrice = 0;
+      state.userId = undefined;
+    },
+
+    setCartUserId(state, action: PayloadAction<string>) {
+      state.userId = action.payload;
+    },
+
+    mergeCart(state, action: PayloadAction<CartProduct[]>) {
+      const serverProducts = action.payload;
+
+      serverProducts.forEach((serverProduct) => {
+        const existingProduct = state.products.find(
+          (p) => p._id === serverProduct._id && p.size === serverProduct.size
+        );
+
+        if (existingProduct) {
+          existingProduct.quantity += serverProduct.quantity;
+        } else {
+          state.products.push(serverProduct);
+        }
+      });
+
+      state.totalQuantity = state.products.reduce((acc, p) => acc + p.quantity, 0);
+      state.totalPrice = state.products.reduce(
+        (acc, p) => acc + p.price * p.quantity,
+        0
+      );
+    },
+
+    setCart(state, action: PayloadAction<{ products: CartProduct[]; userId: string }>) {
+      state.products = action.payload.products;
+      state.userId = action.payload.userId;
+      state.totalQuantity = state.products.reduce((acc, p) => acc + p.quantity, 0);
+      state.totalPrice = state.products.reduce(
+        (acc, p) => acc + p.price * p.quantity,
+        0
+      );
+    },
   },
 });
 
-export const { addProduct, removeProduct, updateProductQuantity, clearCart } = cartSlice.actions;
+export const {
+  addProduct,
+  removeProduct,
+  updateProductQuantity,
+  clearCart,
+  clearCartOnLogout,
+  setCartUserId,
+} = cartSlice.actions;
+
 export default cartSlice;

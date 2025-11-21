@@ -1,24 +1,32 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Badge } from '@mui/material';
 import { ShoppingCart } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { logoutUser } from '../store/auth-actions';
+import { Link, useNavigate } from 'react-router-dom';
 import { RootState, AppDispatch } from '../store';
+import {logout} from "../store/auth-slice.ts";
+import { clearCartOnLogout } from '../store/cart-slice';
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const totalQuantity = useSelector(
     (store: RootState) => store.cart.totalQuantity
   );
   const currentUser = useSelector(
     (store: RootState) => store.auth.currentUser
   );
-  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+
+  }, [currentUser, navigate]);
 
   const handleLogout = (): void => {
-    dispatch(logoutUser());
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    dispatch(clearCartOnLogout());
+    dispatch(logout());
   };
-
 
   return (
     <nav className='grid grid-cols-2 p-4 border-b font-semibold h-18'>

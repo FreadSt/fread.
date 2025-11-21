@@ -11,4 +11,5 @@ export interface CartState {
   products: CartProduct[];
   totalPrice: number;
   totalQuantity: number;
+  userId?: string
 }

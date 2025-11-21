@@ -1,5 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
   _id: string;
@@ -41,7 +40,6 @@ const authSlice = createSlice({
       state.errorMessage = null;
     },
     loginSuccess(state, action: PayloadAction<LoginSuccessPayload>): void {
-      console.log(action.payload, 'payload user');
       state.isFetching = false;
       state.currentUser = action.payload.user;
       state.token = action.payload.token;
