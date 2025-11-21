@@ -22,10 +22,10 @@ interface Props {
 }
 
 const AdminChatTicketList: React.FC<Props> = ({tickets, selectedTicketId, loading, onSelectTicket, onRefresh,}) => (
-  <div className='col-span-1 bg-white rounded-lg shadow-md overflow-y-auto'>
-    <div className='p-4 border-b sticky top-0 bg-white flex justify-between items-center'>
+  <div className='col-span-1 bg-white shadow-md overflow-y-auto md:col-span-2'>
+    <div className='md:p-4 lg:p-4 sm:p-2 xs:p-2 border-b sticky top-0 bg-white flex justify-between items-center'>
       <div>
-        <h2 className='text-xl font-bold'>Support Tickets</h2>
+        <h2 className='lg:text-xl md:text-xl sm:text-sm xs:text-sm font-bold'>Support Tickets</h2>
         <p className='text-sm text-gray-500'>{tickets?.length || 0} active</p>
       </div>
       <IconButton
@@ -43,7 +43,7 @@ const AdminChatTicketList: React.FC<Props> = ({tickets, selectedTicketId, loadin
         <div
           key={ticket.userId}
           onClick={() => onSelectTicket(ticket.userId)}
-          className={`p-4 border-b cursor-pointer transition ${
+          className={`md:p-4 lg:p-4 sm:p-2 xs:p-2 border-b cursor-pointer transition ${
             selectedTicketId === ticket.userId
               ? 'bg-teal-50 border-l-4 border-l-teal-700'
               : 'hover:bg-gray-50'
@@ -51,8 +51,8 @@ const AdminChatTicketList: React.FC<Props> = ({tickets, selectedTicketId, loadin
         >
           <div className='flex justify-between items-start mb-2'>
             <div>
-              <p className='font-semibold'>{ticket.userName}</p>
-              <p className='text-xs text-gray-500'>{ticket.userEmail}</p>
+              <p className='font-semibold overflow-ellipsis'>{ticket.userName}</p>
+              <p className='text-xs text-gray-500 overflow-ellipsis truncate xs:max-w-[70px] max-w-[150px] md:max-w-[200px] lg:max-w-none'>{ticket.userEmail}</p>
             </div>
             {ticket.unreadCount > 0 && (
               <span className='bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold'>

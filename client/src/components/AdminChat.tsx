@@ -131,7 +131,7 @@ export const AdminChat: React.FC = () => {
   );
 
   return (
-    <div className='grid grid-cols-4 gap-4 max-h-screen p-4'>
+    <div className='grid grid-cols-4 md:grid-cols-5 gap-4 min-h-screen'>
       <AdminChatTicketList
         tickets={tickets}
         selectedTicketId={selectedTicketId}
@@ -140,7 +140,7 @@ export const AdminChat: React.FC = () => {
         onRefresh={loadTickets}
       />
 
-      <div className='col-span-3 bg-white rounded-lg shadow-md flex flex-col overflow-hidden h-[70vh] w-full'>
+      <div className='col-span-3 bg-white shadow-md flex flex-col overflow-hidden w-full'>
         {selectedTicket ? (
           <>
             <AdminChatHeader ticket={selectedTicket} />
