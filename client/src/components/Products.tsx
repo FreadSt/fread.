@@ -29,12 +29,9 @@ const Products: React.FC<ProductProps> = ({ category, filter }) => {
       const url = category
         ? `/products?category=${encodeURIComponent(category)}`
         : '/products';
-      console.log('Request URL:', url);
       const response = await publicRequest<Product[]>(url);
-      console.log('Response data:', response);
       setData(response || []);
     } catch (error) {
-      console.error('Error fetching products:', error);
       setData([]);
     }
   }, [category]);
