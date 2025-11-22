@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import img1 from '../assets/images/photo1.webp'
+import img2 from '../assets/images/man_fits.jpg'
+import img3 from '../assets/images/woman_wear.jpg'
 
 interface CarouselItem {
     url: string
@@ -13,7 +15,10 @@ const CAROUSEL_DATA: CarouselItem[] = [
     url: img1 as string,
   },
   {
-    url: 'https://images.unsplash.com/photo-1550995694-3f5f4a7e1bd2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
+    url: img2 as string,
+  },
+  {
+    url: img3 as string,
   },
 ];
 const Carousel: React.FC = () => {
@@ -33,7 +38,7 @@ const Carousel: React.FC = () => {
     <section className='h-carousel relative bg-red-300'>
       <div
         onClick={decrementIndex}
-        className='w-12 h-12 rounded-full bg-gray-100/50 absolute top-1/2 left-4 cursor-pointer'
+        className='z-20 w-12 h-12 rounded-full bg-gray-100/50 absolute top-1/2 left-4 cursor-pointer'
       >
         <ArrowLeft className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2' />
       </div>
@@ -51,7 +56,7 @@ const Carousel: React.FC = () => {
         <Link
           to='categories'
         >
-          <button className='border p-3 bg-white text-black text-lg hover:bg-teal-600 hover:border-none hover:text-white transition ease-out	duration-500'>
+          <button className='z-20 border p-3 bg-white text-black text-lg hover:bg-teal-600 hover:border-none hover:text-white transition ease-out	duration-500'>
             Shop Now <ArrowRight />
           </button>
         </Link>
