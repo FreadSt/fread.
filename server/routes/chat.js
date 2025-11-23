@@ -16,21 +16,26 @@ router.put('/mark-as-read/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const { senderRole } = req.body;
+
+    const roleToMark = senderRole === "user" ? "admin" : "user";
+
     const result = await Message.updateMany(
       {
-        userId: userId,
+        userId,
         isRead: false,
-        senderRole: senderRole === 'admin' ? 'user' : 'admin',
+        senderRole: roleToMark
       },
       {
         $set: { isRead: true, readAt: new Date() }
       }
     );
-    res.status(200).json({ message: 'Messages marked as read', modifiedCount: result.modifiedCount });
+
+    res.status(200).json({ modifiedCount: result.modifiedCount });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 
 router.get('/admin/tickets', async (req, res) => {
