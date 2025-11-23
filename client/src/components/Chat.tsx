@@ -4,6 +4,7 @@ import io, { Socket } from 'socket.io-client';
 import { Close, Message, Send } from '@mui/icons-material';
 import { IconButton, Badge, Fab } from '@mui/material';
 import { RootState } from '../store';
+import {CHAT_CONFIG} from "../constants/chat/chat.ts";
 
 interface ChatMessage {
   _id: string;
@@ -50,7 +51,7 @@ const Chat: React.FC = () => {
 
     newSocket.emit('joinRoom', chatRoom);
 
-    fetch(`${import.meta.env.VITE_API_URL}/chat/user/${currentUser?._id}`)
+    fetch(`${CHAT_CONFIG.API_BASE}/user/${currentUser?._id}`)
       .then((res) => res.json())
       .then((data) => setMessages(Array.isArray(data) ? data : []))
       .catch((err) => console.error('Error fetching messages:', err));
@@ -71,7 +72,7 @@ const Chat: React.FC = () => {
       if (currentUser && isOpen) {
         try {
           await fetch(
-            `${import.meta.env.VITE_API_URL}/chat/mark-as-read/${currentUser?._id}`,
+            `${CHAT_CONFIG.API_BASE}/mark-as-read/${currentUser?._id}`,
             {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },

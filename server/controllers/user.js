@@ -11,7 +11,6 @@ module.exports.updateUser = async (req, res) => {
         new: true
       }
     );
-    // updatedUser is the document after update because of new: true
     res.status(200).json({
       message: 'User is updated successfully!',
       updatedUser
@@ -45,7 +44,7 @@ module.exports.getUsers = async (req, res) => {
   const query = req.query.new || false;
   try {
     const users = query ?
-      await User.find().sort({ _id: -1 }).limit(5) : // -1 => descending order & 1 => ascending order 
+      await User.find().sort({ _id: -1 }).limit(5) :
       await User.find();
     res.status(200).json(users);
   } catch (error) {
@@ -55,14 +54,14 @@ module.exports.getUsers = async (req, res) => {
 
 module.exports.getUsersStats = async (req, res) => {
   const date = new Date();
-  const lastYearDate = new Date(date.setFullYear(date.getFullYear() - 1)); // setFullYear returns a new timestamp.
+  const lastYearDate = new Date(date.setFullYear(date.getFullYear() - 1));
   try {
     // TODO Make sure I understand it
     const data = await User.aggregate([
       { $match: { createdAt: { $gte: lastYearDate } } },
       {
         $project: {
-          month: { $month: "$createdAt" } // Add a new field (month) with the $month of $createdAt
+          month: { $month: "$createdAt" }
         }
       },
       {
