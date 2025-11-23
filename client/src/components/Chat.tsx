@@ -40,17 +40,19 @@ const Chat: React.FC = () => {
   }, [messages]);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000');
+    const socketUrl = import.meta.env.VITE_SOCKET_URL;
+
+    const newSocket = io(socketUrl, {
+      withCredentials: true,
+    });
+
     setSocket(newSocket);
 
     newSocket.emit('joinRoom', chatRoom);
 
-    fetch(`http://localhost:5000/api/chat/user/${currentUser?._id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/chat/user/${currentUser?._id}`)
       .then((res) => res.json())
-      .then((data) => {
-        const messagesArray = Array.isArray(data) ? data : [];
-        setMessages(messagesArray);
-      })
+      .then((data) => setMessages(Array.isArray(data) ? data : []))
       .catch((err) => console.error('Error fetching messages:', err));
 
     newSocket.on('receiveMessage', (message: ChatMessage) => {
@@ -69,17 +71,14 @@ const Chat: React.FC = () => {
       if (currentUser && isOpen) {
         try {
           await fetch(
-            `http://localhost:5000/api/chat/mark-as-read/${currentUser._id}`,
+            `${import.meta.env.VITE_API_URL}/chat/mark-as-read/${currentUser._id}`,
             {
               method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                senderRole: 'user',
-              }),
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ senderRole: 'user' }),
             }
           );
+
 
           setMessages((prev) =>
             prev.map((msg) =>
